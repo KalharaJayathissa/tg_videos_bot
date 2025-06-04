@@ -1,0 +1,19 @@
+modules = ["python-3.12"]
+
+[nix]
+channel = "stable-24_05"
+
+[workflows]
+
+[[workflows.workflow]]
+name = "run"
+mode = "sequential"
+author = 43491986
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "pip install -U python-telegram-bot"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python bot.py"
