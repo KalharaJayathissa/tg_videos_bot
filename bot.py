@@ -1,8 +1,10 @@
 import os
+import threading
 import logging
 import asyncio
 import json
 import random
+from datetime import datetime
 import time
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import (
@@ -22,6 +24,7 @@ del_time = 60 * (60)   #in minutes
 Like = "❤️"
 Dislike = "🤢"
 
+git_sleep_time = 10
 
 # === Messages ===
 A = "බලමු බලමු මචන්."
@@ -32,6 +35,19 @@ E = "නැග්ගෙ නැනෙ මචන්."
 F = "තිබ්බ සේරම ඉවරයි හුත්තෝ, ඔච්චර බලලත් නගින් නැත්තන් කොල්ලො ගහපන් ගිහින් කැරියා"
 G = "මෙන්න මචන් තව වැල් හතරක්."
 H = "විඩියෝ එක දාගත්ත මචන්. බොහොම ස්තූතී."
+
+
+#github CI/CD
+def auto_github_push():
+    while True:
+        os.system("git add .")
+        commit_message = f"Auto-update from Replit at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+        os.system(f'git commit -m "{commit_message}"')
+        os.system("git push origin main")
+        time.sleep(git_sleep_time)
+
+push_thread = threading.Thread(target=auto_github_push,daemon=True)
+push_thread.start()
 
 # sticker
 async def handle_sticker(update: Update, context: ContextTypes.DEFAULT_TYPE):
