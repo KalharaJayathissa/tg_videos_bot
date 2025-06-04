@@ -3,4 +3,9 @@ kal
 adfk
 sdsd
 Gishan
+<<<<<<< HEAD
 git testing
+=======
+Kal
+/start
+>>>>>>> 1a3a41a8f7098b4368cc6f1c9931199da35e832f
