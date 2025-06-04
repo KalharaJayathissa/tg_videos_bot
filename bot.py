@@ -41,8 +41,8 @@ H = "විඩියෝ එක දාගත්ත මචන්. බොහොම 
 def auto_github_push():
     while True:
         os.system("git add .")
-        time_stamp = 
-        commit_message = f"Auto-update from Replit at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+        time_stamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        commit_message = f"Auto-update from Replit at {}"
         os.system(f'git commit -m "{commit_message}"')
         os.system("git push origin main")
         time.sleep(git_sleep_time)
