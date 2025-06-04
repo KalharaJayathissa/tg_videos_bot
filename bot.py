@@ -1,5 +1,6 @@
 import os
 import logging
+import asyncio
 import json
 import random
 import time
@@ -14,6 +15,13 @@ ADMIN_ID = 1056939282  # Replace with your Telegram user ID
 VIDEO_FILE = "videos.json"
 STATS_FILE = "video_stats.json"
 STICKER_FILE = "stickers.json"
+number_of_videos_per_batch = 4
+
+del_time = 60 * (60)   #in minutes
+#icons
+Like = "❤️"
+Dislike = "🤢"
+
 
 # === Messages ===
 A = "බලමු බලමු මචන්."
@@ -126,6 +134,7 @@ INVALID_USER_MESSAGE = "❌ මචන් උඹට ඇක්සස් නෑ. �
 # === COMMANDS ===
 
 async def starting_button(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
     keyboard = [[InlineKeyboardButton(A, callback_data="send_more")]]
     reply_markup = InlineKeyboardMarkup(keyboard)
     await update.message.reply_text(B, reply_markup=reply_markup)
@@ -149,46 +158,71 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def show_stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # if update.effective_user.id != ADMIN_ID:
     #     return
-    stats = load_json(STATS_FILE)
-    if not stats:
-        await update.message.reply_text("📊 No stats yet.")
-        return
-    msg = "📊 Video Stats:\n\n"
-    for i, (fid, data) in enumerate(stats.items(), 1):
-        msg += f"{i}. File ID: `{fid[:10]}...`\n"
-        msg += f"   Sent: {data['send_count']} times\n"
-        msg += f"   Users: {len(data['users'])} unique\n\n"
-        await update.message.reply_text(msg, parse_mode='Markdown')
-        msg =""  # Reset for next iteration
+    # stats = load_json(STATS_FILE)
+    # if not stats:
+    #     await update.message.reply_text("📊 No stats yet.")
+    #     return
+    # msg = "📊 Video Stats:\n\n"
+    # for i, (fid, data) in enumerate(stats.items(), 1):
+    #     msg += f"{i}. File ID: `{fid[:10]}...`\n"
+    #     msg += f"   Sent: {data['send_count']} times\n"
+    #     msg += f"   Users: {len(data['users'])} unique\n\n"
+    #     await update.message.reply_text(msg, parse_mode='Markdown')
+    #     msg =""  # Reset for next iteration
+    await database_info(update, context)  # Call the database_info function to print stats in console
 
 # === VIDEO SENDING ===
 async def send_videos(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
     user = update.effective_user
+   # valid_users = load_json("valid_users.json")
     user_id = user.id
-    chat_id = user.id
+    global chat_id
+    chat_id = update.effective_chat.id
+
+
+    if str(user_id) not in load_json("valid_users.json"):
+        mg = await context.bot.send_message(chat_id=chat_id, text="❌ මචන් උඹට ඇක්සස් නෑ. උබේ නම කියපන් බලන්න පොඩ්ඩක්. ආපහු ලොග් වෙන්න /start දියන්.")
+        asyncio.create_task(delayed_clear(context.bot,chat_id, mg.message_id,delay = del_time))
+        return  # Exit if user is not valid
 
     # load and validate videos
     videos_update = load_json(VIDEO_FILE) #to update the dictionary
     videos = list(load_json(VIDEO_FILE))
     random.shuffle(videos)  # Shuffle the videos list
     start = user_video_progress.get(user_id, 0)
-    end = start + 4
+    end = start + number_of_videos_per_batch
     chunk = videos[start:end]
 
     # if none left
     if not chunk:
-        await context.bot.send_message(chat_id=chat_id, text=C)
+        mg = await context.bot.send_message(chat_id=chat_id, text=C)
+        asyncio.create_task(delayed_clear(context.bot,chat_id, mg.message_id,delay = del_time))
         return
     
     # Send a message prior to the batch
-    await context.bot.send_message(chat_id=chat_id, text= G )
+    mg = await context.bot.send_message(chat_id=chat_id, text= G )
+    asyncio.create_task(delayed_clear(context.bot,chat_id, mg.message_id,delay = del_time))
 
     # send the batch
     for file_id in chunk:
-        await context.bot.send_video(chat_id=chat_id, video=file_id)
-        update_video_stats(file_id, user_id)
-        videos_update[file_id]["watched_by"].append((user.username, user.full_name, user.link))  # Add user info to watched_by
-    
+        keyboard = [[InlineKeyboardButton(f"{Like}{videos_update[file_id]['likes']}", callback_data=f"like:{videos_update[file_id]['video no']}"),
+                        InlineKeyboardButton(f"{Dislike}{videos_update[file_id]['dislikes']}", callback_data=f"dislike:{videos_update[file_id]['video no']}")]]
+        markup = InlineKeyboardMarkup(keyboard)
+        sent_message = await context.bot.send_video(chat_id=chat_id, video=file_id, reply_markup = markup)
+        if str((user.username, user.full_name, user.link)) not in videos_update[str(file_id)]["watched_by"]:
+            videos_update[str(file_id)]["watched_by"][str((user.username, user.full_name, user.link))] = 1 # Add user info to watched_by
+        else:
+            videos_update[str(file_id)]["watched_by"][str((user.username, user.full_name, user.link))] += 1
+        if update.effective_user.id == ADMIN_ID:
+            keyboard =[[InlineKeyboardButton("Delete This!",callback_data = f"delete_video:{videos_update[file_id]['video no']}")]]
+            del_markup = InlineKeyboardMarkup(keyboard)
+            delete_message = await update.callback_query.message.reply_text("❓ delete it? 🗑️",reply_markup=del_markup)
+            asyncio.create_task(delayed_clear(context.bot,chat_id, delete_message.message_id,delay = del_time))
+
+        asyncio.create_task(delayed_clear(context.bot,chat_id, sent_message.message_id,delay = del_time))
+        
+
     user_video_progress[user_id] = end
     save_json(VIDEO_FILE, videos_update)  # Save the updated video data
     # —— load/validate stickers ONCE ——
@@ -199,26 +233,71 @@ async def send_videos(update: Update, context: ContextTypes.DEFAULT_TYPE):
     stickers = [s for s in stickers if isinstance(s, str) and s]
     # send one random sticker if possible
     
-    await context.bot.send_sticker(chat_id=chat_id, sticker=random.choice(stickers))
+    sent_sticker = await context.bot.send_sticker(chat_id=chat_id, sticker=random.choice(stickers))
+    asyncio.create_task(delayed_clear(context.bot,chat_id, sent_sticker.message_id,delay = del_time))
 
     # more videos?
-    if end < len(videos):
+    if end < len(videos) :
         #,[InlineKeyboardButton("test1", callback_data="test1")]
       
         
-        keyboard = [[InlineKeyboardButton(D, callback_data="send_more")],[InlineKeyboardButton("test", callback_data="send_more")]]
+        keyboard = [[InlineKeyboardButton(D, callback_data="send_more")]]
         markup = InlineKeyboardMarkup(keyboard)
-        await context.bot.send_message(chat_id=chat_id, text=E, reply_markup=markup)
+        mg = await context.bot.send_message(chat_id=chat_id, text=E, reply_markup=markup)
+        asyncio.create_task(delayed_clear(context.bot,chat_id, mg.message_id,delay = del_time))
         #keyboard = [[InlineKeyboardButton("test,callback_data ")]]
     else:
         await context.bot.send_message(chat_id=chat_id, text=F)
 
-
+async def delayed_clear(bot, chat_id, message_id, delay):
+    await asyncio.sleep(delay)
+    await bot.delete_message(chat_id = chat_id, message_id = message_id)
+    
 # === CALLBACK HANDLER ===
 async def handle_button(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    if update.callback_query:
-        await update.callback_query.answer()
-    await send_videos(update, context)
+    query = update.callback_query
+    if query:
+        await query.answer()
+    if query.data == "send_more":
+        await send_videos(update, context)
+    elif query.data.startswith("delete_video:"):
+        file_no= query.data.split(":")[1] #this is a string
+        await delete_video(file_no)
+        await query.message.reply_text(f"✅ Video {file_no} deleted successfully.")
+        print(f"Video {file_no} deleted by admin {update.effective_user.username} ({update.effective_user.id})")
+    
+    elif query.data.split(":")[0] == "like":
+        video_no = int(query.data.split(":")[1])
+        videos_ = load_json(VIDEO_FILE)
+        
+        for vid in videos_:
+            if videos_[vid]["video no"] == video_no:
+                keyboard = [[InlineKeyboardButton(f"{Like}{videos_[vid]["likes"]+1}", callback_data=f"like:{videos_[vid]['video no']}"),
+                                InlineKeyboardButton(f"{Dislike}{videos_[vid]["dislikes"]}", callback_data=f"dislike:{videos_[vid]['video no']}")]]
+                markup = InlineKeyboardMarkup(keyboard)
+                mg = await query.edit_message_reply_markup(reply_markup=markup)
+                asyncio.create_task(delayed_clear(context.bot,chat_id, mg.message_id,delay = del_time))
+                videos_[vid]["likes"] += 1
+                save_json(VIDEO_FILE, videos_)
+                print(f"liked the video {video_no}")
+                break
+
+    elif query.data.split(":")[0] == "dislike":
+        video_no = int(query.data.split(":")[1])
+        videos_ = load_json(VIDEO_FILE)
+        
+        for vid in videos_:
+            if videos_[vid]["video no"] == video_no:
+                keyboard = [[InlineKeyboardButton(f"{Like}{videos_[vid]["likes"]}", callback_data=f"like:{videos_[vid]['video no']}"),
+                                InlineKeyboardButton(f"{Dislike}{videos_[vid]["dislikes"]+1}", callback_data=f"dislike:{videos_[vid]['video no']}")]]
+                markup = InlineKeyboardMarkup(keyboard)
+                mg = await query.edit_message_reply_markup(reply_markup=markup)
+                asyncio.create_task(delayed_clear(context.bot,chat_id, mg.message_id,delay = del_time))
+                videos_[vid]["dislikes"] += 1
+                save_json(VIDEO_FILE, videos_)
+                print(f"disliked the video {video_no}")
+                break
+    
 
 
 # Add videos
@@ -230,7 +309,7 @@ async def handle_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not video:
         return
     
-    file_id = video.file_id
+    file_id = video.file_id #this is a string by default
     videos = load_json(VIDEO_FILE)
     if not isinstance(videos, dict):
         videos = {}
@@ -248,13 +327,30 @@ async def handle_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "added_by":update.effective_user.full_name,
             "link to the added guy":update.effective_user.link,
             "added_at": time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),
-            "watched_by": []
+            "watched_by": {}
 
         }
         save_json(VIDEO_FILE, videos)
         await update.message.reply_text(H)
     else:
         await update.message.reply_text("ℹ️ Video already exists.")
+        if update.effective_user.id == ADMIN_ID:
+            keyboard = [[InlineKeyboardButton("Delete", callback_data=f"delete_video:{str(videos[file_id]['video no'])}")]]  # Use video no as identifier
+            # Add a delete button for admin
+            reply_markup = InlineKeyboardMarkup(keyboard)
+            await update.message.reply_text("❓ Do you want to delete it? 🗑️", reply_markup=reply_markup)
+
+async def delete_video(file_no_to_delete):
+    # this delete function is only optimized for admin delete button. if you are going to delete a video in somewhere else, plese do refine this.
+    videos = load_json(VIDEO_FILE)
+    for file in videos:
+        if videos[file]["video no"] == int (file_no_to_delete):
+            file_id = file
+            break
+
+    del videos[file_id]
+    save_json(VIDEO_FILE, videos)
+
 
 async def handle_input(update: Update, context: ContextTypes.DEFAULT_TYPE):
     added_valid_names = load_txt_as_list("add_valid_users.txt")
@@ -269,6 +365,7 @@ async def handle_input(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return ConversationHandler.END
     else:
         await update.message.reply_text("මචන් උබව අදුරන් නෑ මම, බොසාට මැසේජ් එකක් දාල ඇක්සස් දෙන්න කියපන්කො. ඊටපස්සෙ ආයෙ අවිත් මට නම කියහන්.")
+        
     if update.effective_user.id != ADMIN_ID:
         return 1
     else:
@@ -295,6 +392,23 @@ async def handle_add_this_guy(update: Update, context: ContextTypes.DEFAULT_TYPE
         await update.message.reply_text(f"✅ User {name} added successfully!")
     return ConversationHandler.END
 
+async def database_info(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    videos = load_json(VIDEO_FILE)
+    valid_users = load_json("valid_users.json")
+    total_size = 0
+    for vid in videos:
+        total_size += videos[vid]["file_size(MB)"]
+    total_size = round(total_size, 3)  # Round to 2 decimal places
+    total_vids = len(videos)
+    total_stickers = len(load_stickers())
+    total_users = len(valid_users)
+    print(f"🎬 Total Videos: {total_vids}\n💾 Total Size:   {total_size} MB\n👥 Total Users:    {total_users} users\n🎟️ Total Stickers: {total_stickers} stickers"
+)
+    await update.message.reply_text(
+        f"🎬 Total Videos: {total_vids}\n💾 Total Size: {total_size} MB\n👥 Total Users: {total_users} users\n🎟️ Total Stickers: {total_stickers} stickers"
+)
+
+
 
 # === MAIN SETUP ===
 if __name__ == '__main__':
@@ -304,8 +418,8 @@ if __name__ == '__main__':
     conv_handler = ConversationHandler(
         entry_points=[CommandHandler("start", start), CommandHandler("add", add_this_guy)],
         states={
-            1: [MessageHandler(filters.TEXT & ~filters.COMMAND, handle_input)],
-            2: [MessageHandler(filters.TEXT & ~filters.COMMAND, handle_add_this_guy)],
+            1: [MessageHandler(filters.TEXT , handle_input)],
+            2: [MessageHandler(filters.TEXT , handle_add_this_guy)],
         },
         fallbacks=[],
     )
@@ -319,6 +433,12 @@ if __name__ == '__main__':
     app.add_handler(MessageHandler(filters.Sticker.ALL, handle_sticker))  # <-- ADDED THIS
     app.add_handler(MessageHandler(filters.VIDEO, handle_video))
 
+
+    print("🤖 කොල්ල වැඩ!")
+    #logging.basicConfig(level=logging.INFO)
+   
+    app.run_polling()
+
     # tmp = load_json("videos.json")
     # for file in tmp:
     #     tmp[file]["file_size(MB)"] = round(tmp[file]["file_size(MB)"] / (1024 * 1024), 2)
@@ -327,8 +447,8 @@ if __name__ == '__main__':
     #     print()
     # print()
 
+    # tmp = load_json("video_stats.json")
+    # for file in tmp:
+    #     tmp[file]["watched_by"] = {}
+    # save_json("video_stats.json", tmp)
     # print("done")
-
-    print("🤖 කොල්ල වැඩ!")
-    logging.basicConfig(level=logging.DEBUG)
-    app.run_polling()
