@@ -40,7 +40,7 @@ H = "විඩියෝ එක දාගත්ත මචන්. බොහොම 
 #github CI/CD
 def auto_github_push():
     while True:
-        os.system("git pull")
+        
         os.system("git add .")
         time_stamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         commit_message = f"Auto-update from Replit at {time_stamp}"
