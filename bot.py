@@ -42,7 +42,7 @@ def auto_github_push():
     while True:
         os.system("git add .")
         time_stamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        commit_message = f"Auto-update from Replit at {}"
+        commit_message = f"Auto-update from Replit at {time_stamp}"
         os.system(f'git commit -m "{commit_message}"')
         os.system("git push origin main")
         time.sleep(git_sleep_time)
