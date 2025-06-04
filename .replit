@@ -17,3 +17,20 @@ args = "pip install -U python-telegram-bot"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "python bot.py"
+
+[[workflows.workflow]]
+name = "git push"
+mode = "sequential"
+author = 43491986
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "git add ."
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "git commit  -m  \"replit\""
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "git push origin master"
