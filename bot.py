@@ -10,7 +10,7 @@ from telegram.ext import (
 )
 
 # === CONFIGURATION ===
-BOT_TOKEN = '7410380924:AAE7QggH2U57JOfm7Bo_7LjNC-SQccMV0L4'  # Replace with your bot token
+BOT_TOKEN = '7410380924:AAGq5uNK7ZrnCsoh9Bp5xibv7AIxReHho8c'  # Replace with your bot token
 ADMIN_ID = 1056939282  # Replace with your Telegram user ID
 VIDEO_FILE = "videos.json"
 STATS_FILE = "video_stats.json"
@@ -209,7 +209,7 @@ async def send_videos(update: Update, context: ContextTypes.DEFAULT_TYPE):
         keyboard = [[InlineKeyboardButton(f"{Like}{videos_update[file_id]['likes']}", callback_data=f"like:{videos_update[file_id]['video no']}"),
                         InlineKeyboardButton(f"{Dislike}{videos_update[file_id]['dislikes']}", callback_data=f"dislike:{videos_update[file_id]['video no']}")]]
         markup = InlineKeyboardMarkup(keyboard)
-        sent_message = await context.bot.send_video(chat_id=chat_id, video=file_id, reply_markup = markup)
+        sent_message = await context.bot.send_video(chat_id=chat_id, video=file_id, reply_markup = markup,protect_content=True)
         if str((user.username, user.full_name, user.link)) not in videos_update[str(file_id)]["watched_by"]:
             videos_update[str(file_id)]["watched_by"][str((user.username, user.full_name, user.link))] = 1 # Add user info to watched_by
         else:
@@ -272,11 +272,11 @@ async def handle_button(update: Update, context: ContextTypes.DEFAULT_TYPE):
         
         for vid in videos_:
             if videos_[vid]["video no"] == video_no:
-                keyboard = [[InlineKeyboardButton(f"{Like}{videos_[vid]["likes"]+1}", callback_data=f"like:{videos_[vid]['video no']}"),
-                                InlineKeyboardButton(f"{Dislike}{videos_[vid]["dislikes"]}", callback_data=f"dislike:{videos_[vid]['video no']}")]]
+                keyboard = [[InlineKeyboardButton(f"{Like}{videos_[vid]['likes']+1}", callback_data=f"like:{videos_[vid]['video no']}"),
+                                InlineKeyboardButton(f"{Dislike}{videos_[vid]['dislikes']}", callback_data=f"dislike:{videos_[vid]['video no']}")]]
                 markup = InlineKeyboardMarkup(keyboard)
-                mg = await query.edit_message_reply_markup(reply_markup=markup)
-                asyncio.create_task(delayed_clear(context.bot,chat_id, mg.message_id,delay = del_time))
+                await query.edit_message_reply_markup(reply_markup=markup)
+                
                 videos_[vid]["likes"] += 1
                 save_json(VIDEO_FILE, videos_)
                 print(f"liked the video {video_no}")
@@ -288,11 +288,11 @@ async def handle_button(update: Update, context: ContextTypes.DEFAULT_TYPE):
         
         for vid in videos_:
             if videos_[vid]["video no"] == video_no:
-                keyboard = [[InlineKeyboardButton(f"{Like}{videos_[vid]["likes"]}", callback_data=f"like:{videos_[vid]['video no']}"),
-                                InlineKeyboardButton(f"{Dislike}{videos_[vid]["dislikes"]+1}", callback_data=f"dislike:{videos_[vid]['video no']}")]]
+                keyboard = [[InlineKeyboardButton(f"{Like}{videos_[vid]['likes']}", callback_data=f"like:{videos_[vid]['video no']}"),
+                                InlineKeyboardButton(f"{Dislike}{videos_[vid]['dislikes']+1}", callback_data=f"dislike:{videos_[vid]['video no']}")]]
                 markup = InlineKeyboardMarkup(keyboard)
-                mg = await query.edit_message_reply_markup(reply_markup=markup)
-                asyncio.create_task(delayed_clear(context.bot,chat_id, mg.message_id,delay = del_time))
+                await query.edit_message_reply_markup(reply_markup=markup)
+                
                 videos_[vid]["dislikes"] += 1
                 save_json(VIDEO_FILE, videos_)
                 print(f"disliked the video {video_no}")
@@ -347,8 +347,10 @@ async def delete_video(file_no_to_delete):
         if videos[file]["video no"] == int (file_no_to_delete):
             file_id = file
             break
-
-    del videos[file_id]
+    try:
+        del videos[file_id]
+    except:
+        print("File already deleted!")
     save_json(VIDEO_FILE, videos)
 
 
@@ -362,6 +364,17 @@ async def handle_input(update: Update, context: ContextTypes.DEFAULT_TYPE):
         update_user_info(update.effective_user)  # Update user info in users_info.json
         await update.message.reply_text("✅ Access granted මචන්! You can now use the bot.")
         await send_videos(update, context)
+        with open ("add_valid_users.txt",'w') as file:
+            for line in added_valid_names:
+                
+                if line != entered_name:
+                    file.write(line + '\n')
+                    
+                    
+                
+                    
+
+        
         return ConversationHandler.END
     else:
         await update.message.reply_text("මචන් උබව අදුරන් නෑ මම, බොසාට මැසේජ් එකක් දාල ඇක්සස් දෙන්න කියපන්කො. ඊටපස්සෙ ආයෙ අවිත් මට නම කියහන්.")
@@ -436,8 +449,8 @@ if __name__ == '__main__':
 
     print("🤖 කොල්ල වැඩ!")
     #logging.basicConfig(level=logging.INFO)
-   
-    app.run_polling()
+
+    app.run_polling(drop_pending_updates=True)
 
     # tmp = load_json("videos.json")
     # for file in tmp:
