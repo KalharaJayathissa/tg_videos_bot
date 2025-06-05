@@ -19,12 +19,12 @@ STATS_FILE = "video_stats.json"
 STICKER_FILE = "stickers.json"
 number_of_videos_per_batch = 4
 
-del_time = 3#60 * (60)  #in minutes
+del_time = 60 * (60)  #in minutes
 #icons
 Like = "❤️"
 Dislike = "🤢"
 
-git_sleep_time = 30 * 60
+git_sleep_time = 3#30 * 60
 
 # === Messages ===
 A = "Let's check it out."
