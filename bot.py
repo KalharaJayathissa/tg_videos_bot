@@ -24,7 +24,7 @@ del_time = 60 * (60)  #in minutes
 Like = "❤️"
 Dislike = "🤢"
 
-# git_sleep_time = 30 * 60
+git_sleep_time = 30 * 60
 
 # === Messages ===
 A = "බලමු බලමු මචන්."
