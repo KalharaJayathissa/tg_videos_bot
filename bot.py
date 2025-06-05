@@ -24,7 +24,7 @@ del_time = 60 * (60)  #in minutes
 Like = "❤️"
 Dislike = "🤢"
 
-git_sleep_time = 5 #60 * 60
+git_sleep_time = 30 * 60
 
 # === Messages ===
 A = "බලමු බලමු මචන්."
@@ -46,7 +46,8 @@ def auto_github_push():
         time_stamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         commit_message = f"Auto-update from docker at {time_stamp}"
         os.system(f'git commit -m "{commit_message}"')
-        result = os.system("git push origin master --force")
+        # os.system("git pull origin master --rebase")
+        result = os.system("git push origin master -f")
         print(result)
         time.sleep(git_sleep_time)
 
