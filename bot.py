@@ -24,7 +24,7 @@ del_time = 60 * (60)  #in minutes
 Like = "❤️"
 Dislike = "🤢"
 
-git_sleep_time = 30 * 60
+# git_sleep_time = 30 * 60
 
 # === Messages ===
 A = "බලමු බලමු මචන්."
@@ -551,7 +551,7 @@ if __name__ == '__main__':
     print("🤖 කොල්ල වැඩ!")
     #logging.basicConfig(level=logging.INFO)
 
-    app.run_polling(drop_pending_updates=True)
+    app.run_polling()
 
     # tmp = load_json("videos.json")
     # for file in tmp:
