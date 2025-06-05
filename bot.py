@@ -19,7 +19,7 @@ STATS_FILE = "video_stats.json"
 STICKER_FILE = "stickers.json"
 number_of_videos_per_batch = 4
 
-del_time = 60 * (60)  #in minutes
+del_time = 3#60 * (60)  #in minutes
 #icons
 Like = "❤️"
 Dislike = "🤢"
