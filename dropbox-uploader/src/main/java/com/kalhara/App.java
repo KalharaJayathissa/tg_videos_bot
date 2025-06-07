@@ -21,15 +21,14 @@ import com.google.gson.JsonParser;
 public class App {
 
     // Your Dropbox App key & secret
-    private static final String APP_KEY = "1b2v9fu2sf04uds";
-    private static final String APP_SECRET = "rhb4nsutuwv96c5";
+    private static final String APP_KEY = "";
+    private static final String APP_SECRET = "";
 
     // Stored refresh token (from your JSON)
-    private static final String REFRESH_TOKEN = "GrhBLLdSSQ0AAAAAAAAAAfn3MH_rKVVQIhhXU0r5BfC0KCW84e0A2gjrRA9abOvz";
+    private static final String REFRESH_TOKEN = "";
 
     // Hold the current access token here
-    private static String accessToken = "sl.u.AFxhEtK_pxIxYGlImhO_Ik2UcN4SwFT41e501IvUID9k-Mq8h0Dsn08rYrYyKNXo9MhJB61-K-CDowUyfmyZ7d704g6JbEOGKeG53pQ0CzaBBSpGB_wuB7FBVDwhgHa83sRmhRqELx-WvZbIxLzRKC01MkR9KYnG5HvEKvbUuewxGYe8xXMUqEPPRUYpvUYcxgf8VCZLcULXq1B3F83S3kcx_qzWwDsCVh-dNoxAuw3J_VH6xs9JNYKmpvMehXWYQeuVrEc7kGZ_KJbAlyJYaJPwDnB6YxyQl7VGqIyc8h6oyxj4nqnFWkJFrUYNoEWGnb1z-90gz11L8oMqONvSOPpWnGfyuWd-pMmNyQj98TcmtlDgd6LL_cSfVa-7DXYm0q7XRQb9FVPy3DwudMYrzllMhVvmDVC02ccfC8BHVQQgV6iu4l-Hd73P3QObNPiIb0I_AWpBxJLHj5Rg2pcHZDforEvC2IRJQov7W8-QE0Qet2eah6ExU4bE3MfJsr5Eh46uUFVCJe0pXaw8-w8RGclUJ2orSmeJgCzNs_OA03au5fey6HnZKGLn0OI0W8KulC2vwj5ib8Jtps0O0Jq9HdkSNJXP23Xxs4T_fpdCOAVoxN_BrkBwLcOiKX8DJ_99mGD0HlDeTGhzo3nP9NplOMyH2EEbbb26Q3K5XAgmAmGFdT-oCQX_-F1mUVOzADtbV7Eq_zo38JFEfUFUuaY7p35bxetv3wisg-buLXtsbMCjOME7opLZ4U_w78iuWfYSWqOfKm7fhKOGaHQeazfDd1XRN-k-BGsjOscPl6YA0K5eTzxJGJEInwrk7X2Y2_E0q5KDLnUCt6rC8IBVODDUNozhZqQA_SLyS_iXPitcV5g9PC3ds1Rv-WvN1LbjvNCvaoJ8RFQac0ztA9ohbRFmcanT9_ielbyD1BYyNkyonFK8xLGFpZvLJABqugP3VmpXD6f0vm-fJmGXv5_1LmGbvBOKnTwEFA2HcbouyVxbzWSsL0r4r31HPolFFmaiC3k1wjqJ6tZ3jrwtODyq2TiqF73xJPVKLHKBQPPazfkhBVvr0DyMXTmXTbcfj4-daDIIGO4FCY-FtU6v39y9hY8bdE8byltJtUq4X6JNU6-YL8LgTm3Fxhy5-21d41etnyLyjh3Rxpf9yMik-Yv6vQRIW7nNzEiWKc3bpgyBFibO6Ppv1Ymscvzqn1pkEbslBPJjT8vlPcmCiASM1NHh9lR-wbln627Gvym6c5tlqYKYTdIG_gzhA4U7v2pyGeBOwzt-ii6p83eu_P7uhGkjbuZwsH1R7LWJWIsfyrS6XzKV2klV9yJy0sixnLa4TdZAJu8Ms-vqa97mh0BOibd5IWbYrN05YaW1Nh251w5lFZQPQivR-TcGLf7ICoRYmstjvGXqnp4P_Z0zEV4ZOgDFmNz69sq7ys8zu_15iGTFzW3lcdR00OsS8p4N_8KBZG63qrVOJx4";
-
+    private static String accessToken = "";
     // Store token expiration timestamp (epoch ms)
     private static long accessTokenExpiry = 0;
 
