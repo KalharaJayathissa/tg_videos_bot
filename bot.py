@@ -12,8 +12,8 @@ from telegram.ext import (ApplicationBuilder, CommandHandler,
                           filters, ConversationHandler)
 
 # === CONFIGURATION ===
-BOT_TOKEN = '7410380924:AAGq5uNK7ZrnCsoh9Bp5xibv7AIxReHho8c'  # Replace with your bot token
-ADMIN_ID = 1056939282  # Replace with your Telegram user ID
+BOT_TOKEN = ""  # Replace with your bot token
+ADMIN_ID = ""  # Replace with your Telegram user ID
 VIDEO_FILE = "videos.json"
 STATS_FILE = "video_stats.json"
 STICKER_FILE = "stickers.json"
