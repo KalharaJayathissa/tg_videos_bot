@@ -39,22 +39,22 @@ H = "I uploaded the video. Thank you very much."
 
 
 #github CI/CD
-def auto_github_push():
-    while True:
-        os.system('git config --global user.email "kalharajay.gmail.com"')
-        os.system('git config --global user.name "kalhara_j"')
-        os.system("git add .")
-        time_stamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        commit_message = f"Auto-update from docker at {time_stamp}"
-        os.system(f'git commit -m "{commit_message}"')
-        # os.system("git pull origin master --rebase")
-        result = os.system("git push origin master -f")
-        print(result)
-        time.sleep(git_sleep_time)
+# def auto_github_push():
+#     while True:
+#         os.system('git config --global user.email "kalharajay.gmail.com"')
+#         os.system('git config --global user.name "kalhara_j"')
+#         os.system("git add .")
+#         time_stamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+#         commit_message = f"Auto-update from docker at {time_stamp}"
+#         os.system(f'git commit -m "{commit_message}"')
+#         # os.system("git pull origin master --rebase")
+#         result = os.system("git push origin master -f")
+#         print(result)
+#         time.sleep(git_sleep_time)
 
 
-push_thread = threading.Thread(target=auto_github_push, daemon=True)
-push_thread.start()
+# push_thread = threading.Thread(target=auto_github_push, daemon=True)
+# push_thread.start()
 
 
 # sticker
