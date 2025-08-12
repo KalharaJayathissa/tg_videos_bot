@@ -27,18 +27,14 @@ from flask import Flask, request
 #### THIS IS THE ACTUAL SCRIPT THAT IS RUNNING ON AZURE IN A CONTAINER #####
 ############################################################################
 ############################################################################
+"""Yet to be fixed  :there are some inneficient algorithms to be fixed yet. 
+                    :deleyd clear functionality {delete_sent_messages()} should 
+                      be moved out of /stats button."""
 
 # === CONFIGURATION ===
 BOT_TOKEN = 'hdskjhsdfdsjjcknsxahdmahlxj'  # Replace with your bot token
 ADMIN_ID =  3245435676434855 # Replace with your Telegram user ID
 
-# File paths
-VIDEO_FILE = "videos.json"
-STATS_FILE = "video_stats.json"
-STICKER_FILE = "stickers.json"
-VALID_USERS_FILE = "valid_users.json"
-ADD_VALID_USERS_FILE = "add_valid_users.txt"
-USERS_INFO_FILE = "users_info.json"
 
 number_of_videos_per_batch = 6
 
