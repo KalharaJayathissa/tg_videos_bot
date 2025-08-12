@@ -38,7 +38,7 @@ H = "I uploaded the video. Thank you very much."
 
 
 
-#github CI/CD
+#github CI/CD (previously used)
 # def auto_github_push():
 #     while True:
 #         os.system('git config --global user.email "kalharajay.gmail.com"')
