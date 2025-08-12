@@ -186,7 +186,7 @@ def load_stickers(): # This function is called by handle_sticker and send_videos
 
 
 #MOVE TO THE TOP LATER
-INVALID_USER_MESSAGE = "❌ මචන් උඹට ඇක්සස් නෑ. උබේ නම කියපන් බලන්න පොඩ්ඩක්. (Eg: Saman)"
+INVALID_USER_MESSAGE = "❌ Your account is not registered. please send your name to see if access is granted."
 
 
 # === COMMANDS ===
