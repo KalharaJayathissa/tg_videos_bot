@@ -811,8 +811,8 @@ if __name__ == '__main__':
     print("🤖 කොල්ල වැඩ!!")
     logging.basicConfig(level=logging.INFO)
     
-    WEBHOOK_URL = ""
-    LOCAL_WEBHOOK_TUNNELING_URL = ""  #for testing
+    WEBHOOK_URL = "https://rnbfc-101-2-186-38.a.free.pinggy.link"
+    LOCAL_WEBHOOK_TUNNELING_URL = "https://rnbfc-101-2-186-38.a.free.pinggy.link"  #for testing
     WEBHOOK_PORT = 8000
 
     LISTEN_IP = "0.0.0.0"
