@@ -29,7 +29,7 @@ from flask import Flask, request
 ############################################################################
 
 # === CONFIGURATION ===
-BOT_TOKEN = 'hdskjhfjakdfdsjjcknsxahdmahlxj'  # Replace with your bot token
+BOT_TOKEN = 'hdskjhsdfdsjjcknsxahdmahlxj'  # Replace with your bot token
 ADMIN_ID =  3245435676434855 # Replace with your Telegram user ID
 
 # File paths
