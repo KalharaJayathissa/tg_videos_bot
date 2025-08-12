@@ -30,7 +30,7 @@ from flask import Flask, request
 
 # === CONFIGURATION ===
 BOT_TOKEN = 'hdskjhfjakdfdsjjcknsxahdmahlxj'  # Replace with your bot token
-ADMIN_ID =  32454356764855 # Replace with your Telegram user ID
+ADMIN_ID =  3245435676434855 # Replace with your Telegram user ID
 
 # File paths
 VIDEO_FILE = "videos.json"
