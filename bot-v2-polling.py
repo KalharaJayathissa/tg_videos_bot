@@ -24,8 +24,8 @@ from database import *
 ############################################################################
 
 # === CONFIGURATION ===
-BOT_TOKEN = 'chsg fhejan hbsdkjmfsdfhusidjahdvfnsldaks'  # Replace with your bot token
-ADMIN_ID =  2345678 # Replace with your Telegram user ID
+BOT_TOKEN = 'gbcfdikdhgxnicxsmzanxhefciubwocaxdmohzonxc'  # Replace with your bot token
+ADMIN_ID =  462774382 # Replace with your Telegram user ID
 
 # File paths
 VIDEO_FILE = "videos.json"
