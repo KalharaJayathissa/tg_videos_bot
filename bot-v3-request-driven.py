@@ -29,7 +29,8 @@ from flask import Flask, request
 ############################################################################
 """Yet to be fixed  :there are some inneficient algorithms to be fixed yet. 
                     :deleyd clear functionality {delete_sent_messages()} should 
-                      be moved out of /stats button."""
+                      be moved out of /stats button.
+                    :Should write new organized code instead of this spaggeti code!"""
 
 # === CONFIGURATION ===
 BOT_TOKEN = 'hdskjhsdfdsjjcknsxahdmahlxj'  # Replace with your bot token
