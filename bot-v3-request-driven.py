@@ -247,7 +247,7 @@ async def send_videos(update: Update, context: ContextTypes.DEFAULT_TYPE):
         mg = await context.bot.send_message(
             chat_id=chat_id,
             text=
-            "❌ මචන් උඹට ඇක්සස් නෑ. උබේ නම කියපන් බලන්න පොඩ්ඩක්. ආපහු ලොග් වෙන්න /start දියන්."
+            "❌  Your account is not registered. press /start to try again"
         )
         #asyncio.create_task(
         #    delayed_clear(context.bot, chat_id, mg.message_id, delay=del_time))
@@ -478,7 +478,7 @@ async def up_vid_count_updater(update:Update, context: ContextTypes.DEFAULT_TYPE
     users = list(load_valid_users_from_db().keys())
     for user in users:
         try:
-            message_text = f"මචන් අලුතින් වීඩියෝ {NVUW5M}ක්  ඇඩ් වුනා! \nSee database statistics: /stats"
+            message_text = f"{NVUW5M}new videos added! \nSee database statistics: /stats"
             await context.bot.send_message(chat_id=user,text= message_text )
             print(f"bot update message sent to {user}")
         except Forbidden:
@@ -576,7 +576,7 @@ async def handle_input(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await starting_button(update, context)
         update_valid_users(update.effective_user)
         update_user_info(update.effective_user)
-        await update.message.reply_text("✅ Access granted මචන්! You can now use the bot.")
+        await update.message.reply_text("✅ Access granted! You can now use the bot.")
         await send_videos(update, context)
         
         # Remove the name from the pending list in DB (CHANGED)
@@ -586,7 +586,7 @@ async def handle_input(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return ConversationHandler.END
     else:
         await update.message.reply_text(
-            "මචන් උබව අදුරන් නෑ මම, බොසාට මැසේජ් එකක් දාල ඇක්සස් දෙන්න කියපන්කො. ඊටපස්සෙ ආයෙ අවිත් මට නම කියහන්."
+            "Looks like you don't have access. please contact the admininistrator."
         )
         return 1
     # return ConversationHandler.END # End for non-admin on unknown input
@@ -808,7 +808,7 @@ if __name__ == '__main__':
                                    handle_sticker))
     app.add_handler(MessageHandler(filters.VIDEO, handle_video))
 
-    print("🤖 කොල්ල වැඩ!!")
+    print("🤖 BOT is online!!")
     logging.basicConfig(level=logging.INFO)
     
     WEBHOOK_URL = "https://rnbfc-101-2-186-38.a.free.pinggy.link"
@@ -828,6 +828,4 @@ if __name__ == '__main__':
     print("xxx")
 
 
-#cloude run test
 
-    # REMOVED: All the commented-out `tmp = load_json(...)` lines
