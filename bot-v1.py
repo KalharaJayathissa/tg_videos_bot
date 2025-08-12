@@ -158,7 +158,7 @@ def load_stickers():
 #     save_json(VIDEO_FILE, videos)
 
 #MOVE TO THE TOP LATER
-INVALID_USER_MESSAGE = "❌ මචන් උඹට ඇක්සස් නෑ. උබේ නම කියපන් බලන්න පොඩ්ඩක්. (Eg: Saman)"
+INVALID_USER_MESSAGE = "❌ Your account is not registered. please send your name to see if access is granted."
 
 
 # === COMMANDS ===
@@ -219,7 +219,7 @@ async def send_videos(update: Update, context: ContextTypes.DEFAULT_TYPE):
         mg = await context.bot.send_message(
             chat_id=chat_id,
             text=
-            "❌ මචන් උඹට ඇක්සස් නෑ. උබේ නම කියපන් බලන්න පොඩ්ඩක්. ආපහු ලොග් වෙන්න /start දියන්."
+            "❌ Your account is not registered. press /start to try again."
         )
         asyncio.create_task(
             delayed_clear(context.bot, chat_id, mg.message_id, delay=del_time))
@@ -461,7 +461,7 @@ async def handle_input(update: Update, context: ContextTypes.DEFAULT_TYPE):
         update_user_info(
             update.effective_user)  # Update user info in users_info.json
         await update.message.reply_text(
-            "✅ Access granted මචන්! You can now use the bot.")
+            "✅ Access granted! You can now use the bot.")
         await send_videos(update, context)
         with open("add_valid_users.txt", 'w') as file:
             for line in added_valid_names:
@@ -472,7 +472,7 @@ async def handle_input(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return ConversationHandler.END
     else:
         await update.message.reply_text(
-            "මචන් උබව අදුරන් නෑ මම, බොසාට මැසේජ් එකක් දාල ඇක්සස් දෙන්න කියපන්කො. ඊටපස්සෙ ආයෙ අවිත් මට නම කියහන්."
+            "Looks like you don't have access. please contact the admininistrator."
         )
 
     if update.effective_user.id != ADMIN_ID:
@@ -549,23 +549,8 @@ if __name__ == '__main__':
                                    handle_sticker))  # <-- ADDED THIS
     app.add_handler(MessageHandler(filters.VIDEO, handle_video))
 
-    print("🤖 කොල්ල වැඩ!")
+    print("🤖 Bot is online!")
     #logging.basicConfig(level=logging.INFO)
 
     app.run_polling()
 
-    # tmp = load_json("videos.json")
-    # for file in tmp:
-    #     tmp[file]["file_size(MB)"] = round(tmp[file]["file_size(MB)"] / (1024 * 1024), 2)
-    #     print(tmp[file]["file_name"], ":", tmp[file]["file_size(MB)"], "MB")
-    #     # print(file)
-    #     print()
-    # print()
-
-    # tmp = load_json("video_stats.json")
-    # for file in tmp:
-    #     tmp[file]["watched_by"] = {}
-    # save_json("video_stats.json", tmp)
-    # print("done")
-    #replit test
-#test 2
