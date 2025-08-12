@@ -29,8 +29,8 @@ from flask import Flask, request
 ############################################################################
 
 # === CONFIGURATION ===
-BOT_TOKEN = '7410380924:AAGq5uNK7ZrnCsoh9Bp5xibv7AIxReHho8c'  # Replace with your bot token
-ADMIN_ID = 1056939282  # Replace with your Telegram user ID
+BOT_TOKEN = ''  # Replace with your bot token
+ADMIN_ID =   # Replace with your Telegram user ID
 
 # File paths
 VIDEO_FILE = "videos.json"
@@ -811,8 +811,8 @@ if __name__ == '__main__':
     print("🤖 කොල්ල වැඩ!!")
     logging.basicConfig(level=logging.INFO)
     
-    WEBHOOK_URL = "https://tg-bot-v3-2-315705363052.europe-west1.run.app"
-    LOCAL_WEBHOOK_TUNNELING_URL = "https://rnbfc-101-2-186-38.a.free.pinggy.link"
+    WEBHOOK_URL = ""
+    LOCAL_WEBHOOK_TUNNELING_URL = ""  #for testing
     WEBHOOK_PORT = 8000
 
     LISTEN_IP = "0.0.0.0"
