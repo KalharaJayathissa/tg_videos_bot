@@ -62,7 +62,7 @@ H = "I uploaded the video. Thank you very much."
 NVUW5M = 0
 
 #this I variable should be declared inside the function just before sending the message.
-# I = f"මචන් අලුතින් වීඩියෝ {NVUW5M}ක්  ඇඩ් වුනා!"
+# I = f"{NVUW5M} new videos added!"
 
 #New video update sleep timer
 NVUST = 60 * 5 # SECS
