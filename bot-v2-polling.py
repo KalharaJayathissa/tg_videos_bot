@@ -24,7 +24,7 @@ from database import *
 ############################################################################
 
 # === CONFIGURATION ===
-BOT_TOKEN = 'chsg fhejan hbdfhusidjahdvfnsldaks'  # Replace with your bot token
+BOT_TOKEN = 'chsg fhejan hbsdkjmfsdfhusidjahdvfnsldaks'  # Replace with your bot token
 ADMIN_ID =  2345678 # Replace with your Telegram user ID
 
 # File paths
